@@ -11,6 +11,10 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
+      transform: true, // Funciona para convertir los parametros en numeros
+      transformOptions: {
+        enableImplicitConversion: true,
+      }
     })
   )
 
