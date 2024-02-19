@@ -1,4 +1,5 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { ProductImage } from "./product-image.entity";
 
 @Entity()
 export class Product { // El ENTITY sería una tabla
@@ -31,7 +32,12 @@ export class Product { // El ENTITY sería una tabla
   @Column('text', { array: true, default: [] })
   tags: string[];
 
-  //Images
+  @OneToMany( // FORMA DE RELACIONAR LAS TABLAS
+    () => ProductImage,
+    (productImage) => productImage.product,
+    { cascade: true }
+  )
+  images?: ProductImage;
 
   @BeforeInsert() // Para comprobar/hacer los datos antes de que se guarden en la base de datos.
   checkSlugInsert() {
