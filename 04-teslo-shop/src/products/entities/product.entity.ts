@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Product { // El ENTITY sería una tabla
@@ -28,7 +28,28 @@ export class Product { // El ENTITY sería una tabla
   gender: string;
 
 
-  //Tags
+  @Column('text', { array: true, default: [] })
+  tags: string[];
+
   //Images
+
+  @BeforeInsert() // Para comprobar/hacer los datos antes de que se guarden en la base de datos.
+  checkSlugInsert() {
+    if( !this.slug ) {
+      this.slug = this.title;
+    }
+    this.slug = this.slug
+      .toLowerCase()
+      .replaceAll(' ', '_')
+      .replaceAll("'", "");
+  }
+
+  @BeforeUpdate() // Para comprobar/hacer los datos después de que se guardaron en la base de datos y se quiere actualizar.
+  checkSlugUpdate() {
+    this.slug = this.slug
+      .toLowerCase()
+      .replaceAll(' ', '_')
+      .replaceAll("'", "");
+  }
 
 }
