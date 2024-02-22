@@ -1,5 +1,6 @@
 import { IsArray } from "class-validator";
-import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Product } from "src/products/entities";
+import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 
 @Entity('users')
@@ -22,6 +23,13 @@ export class User {
 
   @Column('text', { array: true, default: ['user'] })
   roles: string[];
+
+  @OneToMany(
+    () => Product,
+    (product) => product.user,
+    // { cascade: true, eager: true }
+  )
+  product: Product
 
   @BeforeInsert()
   checkFieldsBeforeInsert() {
